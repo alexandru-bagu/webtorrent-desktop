@@ -25,6 +25,8 @@ platform() {
 rm -rf dist
 
 pushd webtorrent-desktop
+  git checkout .
+
   if ! [ -d node_modules ]; then
     npm install
   fi
@@ -33,6 +35,8 @@ pushd webtorrent-desktop
   sed -i -e "s/map((x) => true)/reduce(function () { return [true].concat(arguments[3].slice(1).map(x=>false)); })/g" src/renderer/webtorrent.js
   sed -i -e "s/map((x) => true)/reduce(function () { return [true].concat(arguments[3].slice(1).map(x=>false)); })/g" src/renderer/controllers/torrent-controller.js
   sed -i -e "s/map((x) => true)/reduce(function () { return [true].concat(arguments[3].slice(1).map(x=>false)); })/g" src/renderer/lib/state.js
+
+  git clean -f
 
   npm run package -- "$(platform)"
   mv dist ../
